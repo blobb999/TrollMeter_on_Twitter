@@ -132,7 +132,7 @@ class TrollMeterGUI(tk.Frame):
         filename = f"{username}_{timestamp}.csv"
 
         # Save troll tweets to CSV file
-        troll_tweets_df.to_csv(filename, index=False)
+        troll_tweets_df.to_csv(filename, index=True)
 
 
     def calculate_scores(self, text, tweet):
@@ -162,6 +162,7 @@ class TrollMeterGUI(tk.Frame):
         # Check if the tweet is from a PRO_ACCOUNTS user or contains a PRO_ACCOUNTS user's mention
         is_pro_account = tweet.user.username.lower() in constants.PRO_ACCOUNTS or any(user.lower() in text for user in constants.PRO_ACCOUNTS)
         is_contra_account = tweet.user.username.lower() in constants.CONTRA_ACCOUNTS or any(user.lower() in text for user in constants.CONTRA_ACCOUNTS)
+        is_pro_account = tweet.user.username.lower() in constants.PRO_ACCOUNTS or any(user.lower() in text for user in constants.PRO_ACCOUNTS)
         
         # Check if the tweet contains CONTRA_TOPICS and is from a CONTRA_ACCOUNTS user
         contains_contra_topic = False
@@ -261,7 +262,6 @@ class TrollMeterGUI(tk.Frame):
             count_label = tk.Label(troll_window, text=f"{key}: {value}")
             count_label.pack()
 
-
     def draw_barometer(self, canvas, percentage):
         # Draw gradient circle
         for i in range(360):
@@ -298,3 +298,4 @@ root = tk.Tk()
 root.title("Twitter Troll Meter")
 gui = TrollMeterGUI(root)
 root.mainloop()
+
