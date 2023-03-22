@@ -162,7 +162,6 @@ class TrollMeterGUI(tk.Frame):
         # Check if the tweet is from a PRO_ACCOUNTS user or contains a PRO_ACCOUNTS user's mention
         is_pro_account = tweet.user.username.lower() in constants.PRO_ACCOUNTS or any(user.lower() in text for user in constants.PRO_ACCOUNTS)
         is_contra_account = tweet.user.username.lower() in constants.CONTRA_ACCOUNTS or any(user.lower() in text for user in constants.CONTRA_ACCOUNTS)
-        is_pro_account = tweet.user.username.lower() in constants.PRO_ACCOUNTS or any(user.lower() in text for user in constants.PRO_ACCOUNTS)
         
         # Check if the tweet contains CONTRA_TOPICS and is from a CONTRA_ACCOUNTS user
         contains_contra_topic = False
