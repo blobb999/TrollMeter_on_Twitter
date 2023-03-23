@@ -1,16 +1,16 @@
 #  ------------------------- Terms Usement -------------------------------
 # 
-# SENTINEL_WORDS are terms used often by most lekely paid agent provocateurs for offending a topic or user in question
+#SENTINEL_WORDS are terms that are often used by paid agent provocateurs to intentionally offend a particular topic or user.
 #
-# AGGRESSIVENESS_WORDS are terms distracting from a fair discussion, poisoning the climate and leading to nowhere which is the goal 
+#AGGRESSIVENESS_WORDS are terms that distract from a fair discussion, poison the atmosphere, and lead to nowhere, which is the intended goal.
 #
-# PRO_TOPICS are topics where paid influencer are pushing, spreading or liking positive as serious threads
+#PRO_TOPICS are topics where paid influencers push, spread, or endorse positive and serious threads.
 #
-# CONTRA_TOPICS are topics where causal people are critical or sceptict
+#CONTRA_TOPICS are topics where ordinary people are critical or skeptical.
 #
-# PRO_ACCOUNTS are paid influencer spreading PRO_TOPICS, using AGGRESSIVENESS_WORDS and SENTINEL_WORDS
+#PRO_ACCOUNTS are paid influencers who spread #PRO_TOPICS and use #AGGRESSIVENESS_WORDS and #SENTINEL_WORDS.
 #
-# CONTRA_ACCOUNTS are causal people discusing or spreading CONTRA_TOPICS but get distracted or attacked from PRO_ACCOUNTS
+#CONTRA_ACCOUNTS are ordinary people discussing or spreading #CONTRA_TOPICS, but who may get distracted or attacked by #PRO_ACCOUNTS.
 
 SENTINEL_WORDS = {'schwurbler': 1, 'verschwörungstheoretiker': 1, 'vtler': 1, 'dunning-kruger': 1, 'flacherdler': 1, 'covidiot': 1, 'aluhut': 1, 'schwachsinn': 1, 'leerdenker': 1, 'querdenker': 1, 'paulanergarten': 1, 'nachweise': 1, 'beweise': 1, 'impfgegner': 1}
 
