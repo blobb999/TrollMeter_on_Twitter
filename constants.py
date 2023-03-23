@@ -14,4 +14,4 @@ CONTRA_TOPICS = {'mondlandung': 1, 'chemtrails': 1, 'impfung': 1, 'bilderberger'
 PRO_ACCOUNTS = {'@goldeneraluhut': 1, '@volksverpetzer': 1}
 
 #CONTRA_ACCOUNTS are ordinary people discussing or spreading #CONTRA_TOPICS, but who may get distracted or attacked by #PRO_ACCOUNTS.
-CONTRA_ACCOUNTS = {'@danieleganser': 1, '@kenfm': 1}
+CONTRA_ACCOUNTS = {'@danieleganser': 1, '@kenfm': 1, '@mz_storymakers': 1, '@maxotte_says': 1}
