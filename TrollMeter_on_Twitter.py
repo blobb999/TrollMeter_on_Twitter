@@ -134,68 +134,70 @@ class TrollMeterGUI(tk.Frame):
         # Save troll tweets to CSV file
         troll_tweets_df.to_csv(filename, index=True)
 
-
     def calculate_scores(self, text, tweet):
-            # Initialize scores
-            pro_score = 0
-            contra_score = 0
-            sentinel_score = 0
-            aggressiveness_counts = {}
-            contra_topic_counts = {}
+        # Initialize scores
+        pro_score = 0
+        contra_score = 0
+        sentinel_score = 0
+        aggressiveness_counts = {}
+        contra_topic_counts = {}
 
-            # Check each word in the text
-            for word in text.split():
-                lower_word = word.lower()
+        # Check each word in the text
+        for word in text.split():
+            lower_word = word.lower()
 
-                if lower_word in constants.AGGRESSIVENESS_WORDS:
-                    aggressiveness_counts[lower_word] = aggressiveness_counts.get(lower_word, 0) + constants.AGGRESSIVENESS_WORDS[lower_word]
+            if lower_word in constants.AGGRESSIVENESS_WORDS:
+                aggressiveness_counts[lower_word] = aggressiveness_counts.get(lower_word, 0) + constants.AGGRESSIVENESS_WORDS[lower_word]
 
-                if lower_word in constants.PRO_ACCOUNTS:
-                    pro_score += constants.PRO_ACCOUNTS[lower_word]
-                    for sentinel_word in constants.SENTINEL_WORDS:
-                        if sentinel_word in text.lower():
-                            sentinel_score += constants.SENTINEL_WORDS[sentinel_word]
-
-                if lower_word in constants.CONTRA_ACCOUNTS:
-                    contra_score += constants.CONTRA_ACCOUNTS[lower_word]
-
-                if lower_word in constants.SENTINEL_WORDS:
-                    sentinel_score += constants.SENTINEL_WORDS[lower_word]
-
-            # Check if the tweet is from a PRO_ACCOUNTS user or contains a PRO_ACCOUNTS user's mention
-            is_pro_account = tweet.user.username.lower() in constants.PRO_ACCOUNTS or any(user.lower() in text for user in constants.PRO_ACCOUNTS)
-            is_contra_account = tweet.user.username.lower() in constants.CONTRA_ACCOUNTS or any(user.lower() in text for user in constants.CONTRA_ACCOUNTS)
-            
-            # Check if the tweet contains CONTRA_TOPICS and is from a CONTRA_ACCOUNTS user
-            contains_contra_topic = False
-            for topic in constants.CONTRA_TOPICS:
-                if re.search(r'\b(?:-)?' + re.escape(topic.lower()) + r'(?:-)?\b', text):
-                    contains_contra_topic = True
-                    if is_contra_account:
-                        contra_topic_counts[topic] = contra_topic_counts.get(topic, 0) + 1
-
-            # Check if the tweet contains CONTRA_TOPICS
-            for topic in constants.CONTRA_TOPICS:
-                if re.search(r'\b(?:-)?' + re.escape(topic.lower()) + r'(?:-)?\b', text):
-                    if is_pro_account:
-                        contra_score += 1  # Increment contra_score if it is a PRO_ACCOUNT user
-                    else:
-                        pro_score += 1     # Increment pro_score if it is not a PRO_ACCOUNT user
-
-            # Check if the tweet contains PRO_TOPICS and SENTINEL_WORDS
-            if is_pro_account:
-                for topic in constants.PRO_TOPICS:
-                    if re.search(r'\b(?:-)?' + re.escape(topic.lower()) + r'(?:-)?\b', text):
-                        pro_score += 1
+            if lower_word in constants.PRO_ACCOUNTS:
+                pro_score += constants.PRO_ACCOUNTS[lower_word]
                 for sentinel_word in constants.SENTINEL_WORDS:
                     if sentinel_word in text.lower():
                         sentinel_score += constants.SENTINEL_WORDS[sentinel_word]
 
-            # Calculate final aggressiveness score
-            aggressiveness_score = max(pro_score - contra_score, 0) + sentinel_score + sum(aggressiveness_counts.values())
-            aggressiveness_score = max(aggressiveness_score, 0)
+            if lower_word in constants.CONTRA_ACCOUNTS:
+                contra_score += constants.CONTRA_ACCOUNTS[lower_word]
+                for sentinel_word in constants.SENTINEL_WORDS:
+                    if sentinel_word in text.lower():
+                        sentinel_score += constants.SENTINEL_WORDS[sentinel_word] * 2
 
-            return aggressiveness_score, aggressiveness_counts, is_contra_account, contains_contra_topic, contra_topic_counts
+            if lower_word in constants.SENTINEL_WORDS:
+                sentinel_score += constants.SENTINEL_WORDS[lower_word]
+
+        # Check if the tweet is from a PRO_ACCOUNTS user or contains a PRO_ACCOUNTS user's mention
+        is_pro_account = tweet.user.username.lower() in constants.PRO_ACCOUNTS or any(user.lower() in text for user in constants.PRO_ACCOUNTS)
+        is_contra_account = tweet.user.username.lower() in constants.CONTRA_ACCOUNTS or any(user.lower() in text for user in constants.CONTRA_ACCOUNTS)
+        
+        # Check if the tweet contains CONTRA_TOPICS and is from a CONTRA_ACCOUNTS user
+        contains_contra_topic = False
+        for topic in constants.CONTRA_TOPICS:
+            if re.search(r'\b(?:-)?' + re.escape(topic.lower()) + r'(?:-)?\b', text):
+                contains_contra_topic = True
+                if is_contra_account:
+                    contra_topic_counts[topic] = contra_topic_counts.get(topic, 0) + 1
+
+        # Check if the tweet contains CONTRA_TOPICS
+        for topic in constants.CONTRA_TOPICS:
+            if re.search(r'\b(?:-)?' + re.escape(topic.lower()) + r'(?:-)?\b', text):
+                if is_pro_account:
+                    contra_score += 1  # Increment contra_score if it is a PRO_ACCOUNT user
+                else:
+                    pro_score += 1     # Increment pro_score if it is not a PRO_ACCOUNT user
+
+        # Check if the tweet contains PRO_TOPICS and SENTINEL_WORDS
+        if is_pro_account:
+            for topic in constants.PRO_TOPICS:
+                if re.search(r'\b(?:-)?' + re.escape(topic.lower()) + r'(?:-)?\b', text):
+                    pro_score += 1
+            for sentinel_word in constants.SENTINEL_WORDS:
+                if sentinel_word in text.lower():
+                    sentinel_score += constants.SENTINEL_WORDS[sentinel_word]
+
+        # Calculate final aggressiveness score
+        aggressiveness_score = max(pro_score - contra_score, 0) + sentinel_score + sum(aggressiveness_counts.values())
+        aggressiveness_score = max(aggressiveness_score, 0)
+
+        return aggressiveness_score, aggressiveness_counts, is_contra_account, contains_contra_topic, contra_topic_counts
 
     def show_detailed_troll_score(self, tweets_df):
         troll_count = len(tweets_df[tweets_df['Troll'] == True])
@@ -292,4 +294,5 @@ root = tk.Tk()
 root.title("Twitter Troll Meter")
 gui = TrollMeterGUI(root)
 root.mainloop()
+
 
