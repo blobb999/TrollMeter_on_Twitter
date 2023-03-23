@@ -1,6 +1,6 @@
 #  ------------------------- Terms Usement -------------------------------
 # 
-#SENTINEL_WORDS are terms that are often used by paid agent provocateurs to intentionally offend a particular topic or user.
+#SENTINEL_WORDS are terms that are often used by paid agent provocateurs to intentionally offend a particular CONTRA_TOPICS or user.
 #
 #AGGRESSIVENESS_WORDS are terms that distract from a fair discussion, poison the atmosphere, and lead to nowhere, which is the intended goal.
 #
